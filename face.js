@@ -97,11 +97,14 @@ function Face() {
     this.draw_segment(positions.top_lip);
     this.draw_segment(positions.bottom_lip);
 
+    this.draw_segment(positions.left_eye);
+    this.draw_segment(positions.right_eye);
+
     fill(255);
     stroke(255);
 
-    let left_eye_pos = segment_average(positions.left_eye);
-    let right_eye_pos = segment_average(positions.right_eye);
+    // let left_eye_pos = segment_average(positions.left_eye);
+    // let right_eye_pos = segment_average(positions.right_eye);
 
     // eyes
     noStroke();
