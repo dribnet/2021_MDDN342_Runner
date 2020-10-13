@@ -36,6 +36,7 @@ function Face() {
   this.num_eyes = 2;    // can be either 1 (cyclops) or 2 (two eyes)
   this.eye_shift = -1;   // range is -10 to 10
   this.mouth_value = 1;  // range is 0.5 to 8
+  this.lash_scale = 2;
 
   // example of a function *inside* the face object.
   // this draws a segment, and do_loop will connect the ends if true
@@ -86,7 +87,7 @@ function Face() {
     // draw segments of face using points
     fill(128);
     stroke(128);
-    this.draw_segment(positions.chin);
+    //this.draw_segment(positions.chin);
 
     fill(100, 0, 100);
     stroke(100, 0, 100);
@@ -98,8 +99,8 @@ function Face() {
 
     fill(200, 0, 0);
     stroke(200, 0, 0);
-    this.draw_segment(positions.top_lip);
-    this.draw_segment(positions.bottom_lip);
+    //this.draw_segment(positions.top_lip);
+    //this.draw_segment(positions.bottom_lip);
 
     fill(255);
     stroke(255);
@@ -168,7 +169,6 @@ function Face() {
     stroke(0);
     noFill();
     strokeWeight(0.08);
-    print(abs(nose_tip[2][0] - nose_bridge[3][0]) );
     if(abs(nose_tip[2][0] - nose_bridge[3][0]) > 0.08){
       if(nose_tip[2][0] - nose_bridge[3][0] > 0){
         //line(nose_bridge[0][0],nose_bridge[0][1], nose_tip[0][0], nose_tip[0][1]);
@@ -224,11 +224,46 @@ function Face() {
       endShape();
     }
 
-   fill(255,1,1);
+    // lips
+    print(top_lip[9][1] - bottom_lip[9][1]);
+    fill(255,0,0);
     noStroke();
-    //ellipse(top_lip[11][0],top_lip[11][1],0.1);
-
-
+    if(abs(top_lip[9][1] - bottom_lip[9][1]) < 0.1){
+      beginShape();
+        for(let i = 0; i< int(top_lip.length/2) ; i++){
+          vertex(top_lip[i][0], top_lip[i][1]);
+        }
+        for(let i = 0; i< int(bottom_lip.length/2) ; i++){
+          vertex(bottom_lip[i][0], bottom_lip[i][1]);
+        }
+      endShape();
+    }
+    else{
+      push();
+      noStroke();
+      fill(0);
+      beginShape();
+        curveVertex(top_lip[top_lip.length-1][0], top_lip[top_lip.length-1][1]);
+        for(let i = 0; i <top_lip.length; i++){
+          curveVertex(top_lip[i][0], top_lip[i][1]);
+        }
+        curveVertex(top_lip[0][0], top_lip[0][1]);
+        curveVertex(top_lip[1][0], top_lip[1][1]);
+      endShape();
+    pop();
+    push();
+      noStroke();
+      fill(0);
+      beginShape();
+        curveVertex(bottom_lip[bottom_lip.length-1][0], bottom_lip[bottom_lip.length-1][1]);
+        for(let i = 0; i <bottom_lip.length; i++){
+          curveVertex(bottom_lip[i][0], bottom_lip[i][1]);
+        }
+        curveVertex(bottom_lip[0][0], bottom_lip[0][1]);
+        curveVertex(bottom_lip[1][0], bottom_lip[1][1]);
+      endShape();
+    pop();
+    }
 
 
     // eyebrows
@@ -268,7 +303,7 @@ function Face() {
 
     let left_eye_pos = segment_average(positions.left_eye);
     let right_eye_pos = segment_average(positions.right_eye);
-    let lash_scale = 0.08;
+    //let lash_scale = 0.08;
 
     ///// right eye /////////
     push();
@@ -280,7 +315,7 @@ function Face() {
       let tempRX = right_eye[3][0] + 0.05;
       beginShape();
         stroke(0);
-        strokeWeight(lash_scale);
+        strokeWeight(this.lash_scale * 0.04);
         noFill();
         curveVertex(right_eye[0][0], right_eye[0][1]);
         curveVertex(right_eye[0][0], right_eye[0][1]);
@@ -335,7 +370,7 @@ function Face() {
       // endShape();
       noFill();
       stroke(0);
-      strokeWeight(lash_scale);
+      strokeWeight(this.lash_scale * 0.04);
         beginShape();
         curveVertex(tempX - 0.05,tempY);
         curveVertex(tempX - 0.05,tempY);
@@ -372,6 +407,7 @@ function Face() {
   /* set internal properties based on list numbers 0-100 */
   this.setProperties = function(settings) {
     // eye col?
+    this.lash_scale = int(map(settings[0], 0, 100, 1, 2));
     this.num_eyes = int(map(settings[0], 0, 100, 1, 2));
     this.eye_shift = map(settings[1], 0, 100, -2, 2);
     this.mouth_value = map(settings[2], 0, 100, 0.5, 8);
@@ -380,7 +416,7 @@ function Face() {
   /* get internal properties as list of numbers 0-100 */
   this.getProperties = function() {
     let settings = new Array(3);
-    settings[0] = map(this.num_eyes, 1, 2, 0, 100);
+    settings[0] = map(this.lash_scale, 1, 2, 0, 100);
     settings[1] = map(this.eye_shift, -2, 2, 0, 100);
     settings[2] = map(this.mouth_value, 0.5, 8, 0, 100);
     return settings;
