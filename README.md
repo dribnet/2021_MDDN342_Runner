@@ -2,5 +2,10 @@
 
 My inital idea for my face is a stylised face with watercolour-esque shading on one side.
 
-Created the face base and all of the watercolour shading areas in red.
-Two of the sliders are currently in control of the thickness of the top eyelid and the colour of the eyes.
+Created the face base and all of the watercolour shading areas and reorganised colours.
+Two of the sliders are currently in control of:
+  the thickness of the top eyelid
+  the colour of the eyes
+  style of the lip
+  how bright the face is
+  hue of the entire face

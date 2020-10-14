@@ -7,7 +7,7 @@
 var DEBUG_MODE = true;
 
 // this can be used to set the number of sliders to show
-var NUM_SLIDERS = 3;
+var NUM_SLIDERS = 5;
 
 // other variables can be in here too
 // here's some examples for colors used
@@ -38,6 +38,9 @@ function Face() {
   this.mouth_value = 1;  // range is 0.5 to 8
   this.lash_scale = 2;
   this.eye_col_index = 0;
+  this.lip_style = 0;
+  this.shade = 0;
+  this.hue = 0;
 
   // example of a function *inside* the face object.
   // this draws a segment, and do_loop will connect the ends if true
@@ -77,13 +80,25 @@ function Face() {
     let top_lip = positions.top_lip;
     let bottom_lip = positions.bottom_lip;
 
+    colorMode(HSL);
 
-    let col1 = color(255,0,0);
-    let col2 = color(0,255,0);
-    let col3 = color(0,0,255);
-    let colours = [col1,col2,col3];
+    let eye_col1 = color(255,100,50);
+    let eye_col2 = color(125,100,50);
+    let eye_col3 = color(50,100,50);
+    let eye_colours = [eye_col1,eye_col2,eye_col3];
+
+    let s1 = color((255 + this.hue)%360,80,30,0.4);
+    let s2 = color((280 + this.hue)%360,80,40,0.1);
+    let s3 = color((300 + this.hue)%360,80,60,0.1);
+    let s4 = color((310 + this.hue)%360,80,80,0.1);
+    let shadow_colours = [s1,s2,s3,s4];
+
+    
+    let face_base_colour = color((200 + this.hue)%360, 50, 100 - this.shade/3);
+    let outline_colour = color(150,100,5);
 
 
+    //let face_col = color();
 
     // positive = looking left
     // negative = looking right
@@ -96,7 +111,7 @@ function Face() {
     push();
       beginShape();
         noStroke();
-        fill(255,150);
+        fill(face_base_colour);
         curveVertex(left_eyebrow[4][0], left_eyebrow[4][1] + brow_h);
         curveVertex(left_eyebrow[2][0], left_eyebrow[2][1] + brow_h);
         // curveVertex(left_eyebrow[1][0], left_eyebrow[1][1] + brow_h);
@@ -121,9 +136,9 @@ function Face() {
 
     // nose/eyelid
     noStroke(); // could make fringe effect w/o?
-    fill(255,0,0);
     push();
       beginShape();
+      fill(shadow_colours[0]);
         curveVertex(right_eyebrow[0][0], right_eyebrow[0][1] + brow_h/2);
         curveVertex(nose_bridge[0][0], nose_bridge[0][1]);
         curveVertex(nose_bridge[3][0], nose_bridge[3][1]);
@@ -145,6 +160,7 @@ function Face() {
 
     // under nose / keep this or not?
     push();
+      fill(shadow_colours[0]);
       beginShape();
         curveVertex(nose_tip[0][0] - 0.01, nose_tip[0][1]);
         curveVertex(nose_tip[4][0] + 0.01, nose_tip[4][1]);
@@ -156,6 +172,7 @@ function Face() {
 
     // eyelid
     push();
+      fill(shadow_colours[0]);
       beginShape();
         curveVertex(left_eye[3][0] + 0.15, left_eye[3][1] - 0.05);
         curveVertex(left_eye[2][0], left_eye[2][1] - 0.1);
@@ -171,6 +188,7 @@ function Face() {
     
     // chin
     push();
+      fill(shadow_colours[0]);
       beginShape();
         curveVertex(bottom_lip[2][0], bottom_lip[2][1] + 0.05);
         // curveVertex(bottom_lip[3][0], bottom_lip[3][1] + 0.05);
@@ -186,6 +204,7 @@ function Face() {
 
     // face side
     push();
+      fill(shadow_colours[0]);
       beginShape();
         curveVertex(right_eyebrow[3][0], right_eyebrow[3][1] + brow_h/2);
         curveVertex(right_eyebrow[4][0], right_eyebrow[4][1] + brow_h/2);
@@ -207,43 +226,99 @@ function Face() {
 
     // LIPS
     print(top_lip[9][1] - bottom_lip[9][1]);
-    fill(255,0,0);
+    fill(outline_colour);
     noStroke();
-    if(abs(top_lip[9][1] - bottom_lip[9][1]) < 0.1){
-      beginShape();
-        for(let i = 0; i< int(top_lip.length/2) ; i++){
-          vertex(top_lip[i][0], top_lip[i][1]);
-        }
-        for(let i = 0; i< int(bottom_lip.length/2) ; i++){
-          vertex(bottom_lip[i][0], bottom_lip[i][1]);
-        }
-      endShape();
+    if(abs(top_lip[9][1] - bottom_lip[9][1]) < 0.1){ // if lip close
+      if(this.lip_style == 0){
+        beginShape();
+          for(let i = 0; i< int(top_lip.length/2) ; i++){
+            vertex(top_lip[i][0], top_lip[i][1]);
+          }
+          for(let i = 0; i< int(bottom_lip.length/2) ; i++){
+            vertex(bottom_lip[i][0], bottom_lip[i][1]);
+          }
+        endShape();
+      }
+      else{
+        push();
+          noStroke();
+          fill(outline_colour);
+          beginShape();
+            for(let i = 0; i< top_lip.length; i++){
+              vertex(top_lip[i][0], top_lip[i][1]);
+            }
+          endShape();
+          stroke(outline_colour);
+          strokeWeight(0.08);
+          strokeCap(ROUND);
+          noFill();
+          beginShape();
+          curveVertex(bottom_lip[1][0], bottom_lip[1][1]);
+          curveVertex(bottom_lip[2][0], bottom_lip[2][1]);
+          curveVertex(bottom_lip[3][0], bottom_lip[3][1]);
+          curveVertex(bottom_lip[4][0], bottom_lip[4][1]);
+          curveVertex(bottom_lip[5][0], bottom_lip[5][1]);
+          endShape();
+        pop();
+          
+      }
     }
-    else{
+    else{ // mouth open
+      if(this.lip_style == 0){
+        push();
+        noStroke();
+        fill(outline_colour);
+        beginShape();
+          curveVertex(top_lip[top_lip.length-1][0], top_lip[top_lip.length-1][1]);
+          for(let i = 0; i <top_lip.length; i++){
+            curveVertex(top_lip[i][0], top_lip[i][1]);
+          }
+          curveVertex(top_lip[0][0], top_lip[0][1]);
+          curveVertex(top_lip[1][0], top_lip[1][1]);
+        endShape();
+      pop();
       push();
-      noStroke();
-      fill(0);
-      beginShape();
-        curveVertex(top_lip[top_lip.length-1][0], top_lip[top_lip.length-1][1]);
-        for(let i = 0; i <top_lip.length; i++){
-          curveVertex(top_lip[i][0], top_lip[i][1]);
-        }
-        curveVertex(top_lip[0][0], top_lip[0][1]);
-        curveVertex(top_lip[1][0], top_lip[1][1]);
-      endShape();
-    pop();
-    push();
-      noStroke();
-      fill(0);
-      beginShape();
-        curveVertex(bottom_lip[bottom_lip.length-1][0], bottom_lip[bottom_lip.length-1][1]);
-        for(let i = 0; i <bottom_lip.length; i++){
-          curveVertex(bottom_lip[i][0], bottom_lip[i][1]);
-        }
-        curveVertex(bottom_lip[0][0], bottom_lip[0][1]);
-        curveVertex(bottom_lip[1][0], bottom_lip[1][1]);
-      endShape();
-    pop();
+        noStroke();
+        fill(outline_colour);
+        beginShape();
+          curveVertex(bottom_lip[bottom_lip.length-1][0], bottom_lip[bottom_lip.length-1][1]);
+          for(let i = 0; i <bottom_lip.length; i++){
+            curveVertex(bottom_lip[i][0], bottom_lip[i][1]);
+          }
+          curveVertex(bottom_lip[0][0], bottom_lip[0][1]);
+          curveVertex(bottom_lip[1][0], bottom_lip[1][1]);
+        endShape();
+      pop();  
+      }
+      else{
+        push();
+          noStroke();
+          fill(outline_colour);
+          strokeWeight(0.04);
+          strokeCap(ROUND);
+          beginShape();
+            for(let i = 0; i< top_lip.length; i++){
+              vertex(top_lip[i][0], top_lip[i][1]);
+            }
+          endShape();
+
+          noFill();
+          stroke(outline_colour);
+          beginShape();
+            for(let i = int(bottom_lip.length/2) + 1; i < bottom_lip.length; i++){
+              vertex(bottom_lip[i][0], bottom_lip[i][1]);
+            }
+          endShape();
+
+          beginShape();
+            curveVertex(bottom_lip[1][0], bottom_lip[1][1]);
+            curveVertex(bottom_lip[2][0], bottom_lip[2][1]);
+            curveVertex(bottom_lip[3][0], bottom_lip[3][1]);
+            curveVertex(bottom_lip[4][0], bottom_lip[4][1]);
+            curveVertex(bottom_lip[5][0], bottom_lip[5][1]);
+          endShape();
+        pop();
+      }
     }
 
 
@@ -252,7 +327,7 @@ function Face() {
     let eyebrow_thicknessL = (left_eye[4][1] - left_eyebrow[4][1])/8 + 0.02;
     push();
       translate(0,-0.1);
-      fill(0);
+      fill(outline_colour);
       noStroke();
       beginShape();
         vertex(right_eyebrow[0][0] - abs(direction/5), right_eyebrow[0][1] + eyebrow_thicknessR);
@@ -283,6 +358,7 @@ function Face() {
     // under eye right watercolor
     push();
       beginShape();
+        fill(shadow_colours[0]);
         translate(right_eye_pos[0], right_eye_pos[1]);
         scale(1.5,2);
         translate(-right_eye_pos[0], -right_eye_pos[1]);
@@ -304,7 +380,7 @@ function Face() {
       translate(-right_eye_pos[0], -right_eye_pos[1]);
 
       beginShape();
-        stroke(0);
+        stroke(outline_colour);
         strokeWeight(this.lash_scale * 0.04);
         noFill();
         curveVertex(right_eye[0][0], right_eye[0][1]);
@@ -316,17 +392,17 @@ function Face() {
         curveVertex(tempRX + 0.05,tempRY);
       endShape();
       
-      fill(0);
+      fill(outline_colour);
       noStroke();
       let e_height = dist(right_eye[4][0],right_eye[4][1],right_eye[2][0],right_eye[2][1]);
       ellipse(right_eye_pos[0],right_eye_pos[1],0.25, e_height);
-      fill(colours[this.eye_col_index]);
+      fill(eye_colours[this.eye_col_index]);
       ellipse(right_eye_pos[0],right_eye_pos[1]+0.03,0.2,e_height/2);
       fill(255,150);
       ellipse(right_eye_pos[0],right_eye_pos[1]+0.03,0.15,e_height/2);
-      fill(0);
+      fill(outline_colour);
       ellipse(right_eye_pos[0],right_eye_pos[1],0.15,e_height/2);
-      fill(0);
+      fill(outline_colour);
 
       strokeWeight(0.05);
       beginShape();
@@ -347,6 +423,7 @@ function Face() {
     let tempX = left_eye[0][0] - 0.05;
 
     push(); // left under eye watercolour
+      fill(shadow_colours[0]);
       translate(left_eye_pos[0], left_eye_pos[1]);
       scale(1.5,2);
       translate(-left_eye_pos[0], -left_eye_pos[1]);
@@ -384,7 +461,7 @@ function Face() {
       //   curveVertex(tempX,tempY);
       // endShape();
       noFill();
-      stroke(0);
+      stroke(outline_colour);
       strokeWeight(this.lash_scale * 0.04);
         beginShape();
         curveVertex(tempX - 0.05,tempY);
@@ -399,17 +476,17 @@ function Face() {
         // curveVertex(left_eyebrow[4][0] +(nose_bridge[0][0] - left_eyebrow[4][0])/1.1, nose_bridge[0][1]);
      
       endShape();
-      fill(0);
+      fill(outline_colour);
       noStroke();
       e_height = dist(positions.left_eye[4][0],positions.left_eye[4][1],positions.left_eye[2][0],positions.left_eye[2][1]);
       ellipse(left_eye_pos[0],left_eye_pos[1],0.25, e_height);
-      fill(colours[this.eye_col_index]);
+      fill(eye_colours[this.eye_col_index]);
       ellipse(left_eye_pos[0],left_eye_pos[1]+0.03,0.2,e_height/2);
       fill(255,150);
       ellipse(left_eye_pos[0],left_eye_pos[1]+0.03,0.15,e_height/2);
-      fill(0);
+      fill(outline_colour);
       ellipse(left_eye_pos[0],left_eye_pos[1],0.15,e_height/2);
-      fill(0);
+      fill(outline_colour);
 
 
       strokeWeight(0.05);
@@ -430,7 +507,7 @@ function Face() {
 
 
     // NOSE
-    stroke(0);
+    stroke(outline_colour);
     noFill();
     strokeWeight(0.08);
     if(abs(nose_tip[2][0] - nose_bridge[3][0]) > 0.08){
@@ -486,7 +563,7 @@ function Face() {
       endShape();
     }
 
-
+    colorMode(RGB);
   }
 
   /* set internal properties based on list numbers 0-100 */
@@ -494,9 +571,12 @@ function Face() {
     // eye col?
     this.lash_scale = int(map(settings[0], 0, 100, 1, 2));
     this.eye_col_index = int(map(settings[1], 0, 100, 0, 2));
+    this.lip_style = int(map(settings[2], 0, 100, 0, 1));
+    this.shade = settings[3];
+    this.hue = settings[4];
     // this.num_eyes = int(map(settings[0], 0, 100, 1, 2));
     // this.eye_shift = map(settings[1], 0, 100, -2, 2);
-    this.mouth_value = map(settings[2], 0, 100, 0.5, 8);
+    //this.mouth_value = map(settings[2], 0, 100, 0.5, 8);
   }
 
   /* get internal properties as list of numbers 0-100 */
@@ -504,7 +584,9 @@ function Face() {
     let settings = new Array(3);
     settings[0] = map(this.lash_scale, 1, 2, 0, 100);
     settings[1] = map(this.eye_col_index, 0, 2, 0, 100);
-    settings[2] = map(this.mouth_value, 0.5, 8, 0, 100);
+    settings[2] = map(this.lip_style, 0, 1, 0, 100);
+    settings[3] = this.shade;
+    settings[4] = this.hue;
     return settings;
   }
 }
