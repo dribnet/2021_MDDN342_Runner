@@ -168,9 +168,6 @@ function Face() {
         curveVertex(left_eye[2][0], left_eye[2][1] - 0.05);
       endShape();
     pop();
-
-
-
     
     // chin
     push();
@@ -187,7 +184,24 @@ function Face() {
       endShape();
     pop();
 
+    // face side
+    push();
+      beginShape();
+        curveVertex(right_eyebrow[3][0], right_eyebrow[3][1] + brow_h/2);
+        curveVertex(right_eyebrow[4][0], right_eyebrow[4][1] + brow_h/2);
+        curveVertex(chin[15][0], chin[15][1]);
+        curveVertex(chin[13][0], chin[13][1]);
+        curveVertex(chin[11][0], chin[11][1]);
+        curveVertex(chin[9][0], chin[9][1]);
+        curveVertex(top_lip[6][0] + (chin[12][0] - top_lip[6][0])/2 , top_lip[6][1]);
+        curveVertex(nose_bridge[1][0] + (chin[15][0] - nose_bridge[1][0])/1.5, nose_bridge[2][1]);
+        curveVertex(right_eye[3][0] + (chin[15][0] - right_eye[3][0])/2, right_eye[3][1]);
 
+
+        curveVertex(right_eyebrow[3][0], right_eyebrow[3][1] + brow_h/2);
+        curveVertex(right_eyebrow[4][0], right_eyebrow[4][1] + brow_h/2);
+      endShape();
+    pop();
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -421,22 +435,22 @@ function Face() {
     strokeWeight(0.08);
     if(abs(nose_tip[2][0] - nose_bridge[3][0]) > 0.08){
       if(nose_tip[2][0] - nose_bridge[3][0] > 0){
-        //line(nose_bridge[0][0],nose_bridge[0][1], nose_tip[0][0], nose_tip[0][1]);
-        beginShape();
-          curveVertex(left_eyebrow[4][0],left_eyebrow[4][1] + brow_h/2);
-          curveVertex(left_eyebrow[4][0],left_eyebrow[4][1] + brow_h/2);
-          curveVertex(left_eyebrow[4][0] +(nose_bridge[0][0] - left_eyebrow[4][0])/1.1, nose_bridge[0][1]);
-          // curveVertex(nose_bridge[0][0], nose_bridge[0][1]);
-          //curveVertex(nose_bridge[1][0], nose_bridge[1][1]);
-          curveVertex(nose_bridge[2][0], nose_bridge[2][1]);
-          //curveVertex(nose_bridge[3][0], nose_bridge[3][1]);
-          //curveVertex(nose_bridge[3][0], nose_bridge[3][1]);
-           curveVertex(nose_tip[0][0], nose_tip[0][1]);
-          // curveVertex(nose_tip[1][0], nose_tip[1][1]);
-          // curveVertex(nose_tip[2][0], nose_tip[2][1]);
-          // curveVertex(nose_tip[2][0], nose_tip[2][1]);
+        // //line(nose_bridge[0][0],nose_bridge[0][1], nose_tip[0][0], nose_tip[0][1]);
+        // beginShape();
+        //   curveVertex(left_eyebrow[4][0],left_eyebrow[4][1] + brow_h/2);
+        //   curveVertex(left_eyebrow[4][0],left_eyebrow[4][1] + brow_h/2);
+        //   curveVertex(left_eyebrow[4][0] +(nose_bridge[0][0] - left_eyebrow[4][0])/1.1, nose_bridge[0][1]);
+        //   // curveVertex(nose_bridge[0][0], nose_bridge[0][1]);
+        //   //curveVertex(nose_bridge[1][0], nose_bridge[1][1]);
+        //   curveVertex(nose_bridge[2][0], nose_bridge[2][1]);
+        //   //curveVertex(nose_bridge[3][0], nose_bridge[3][1]);
+        //   //curveVertex(nose_bridge[3][0], nose_bridge[3][1]);
+        //    curveVertex(nose_tip[0][0], nose_tip[0][1]);
+        //   // curveVertex(nose_tip[1][0], nose_tip[1][1]);
+        //   // curveVertex(nose_tip[2][0], nose_tip[2][1]);
+        //   // curveVertex(nose_tip[2][0], nose_tip[2][1]);
           
-        endShape();
+        // endShape();
         if(direction > 0.5){
           line(nose_tip[2][0],nose_tip[2][1],nose_bridge[3][0],nose_bridge[3][1]);
         }
