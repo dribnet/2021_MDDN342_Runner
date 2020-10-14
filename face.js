@@ -1,10 +1,10 @@
 /*
  * FaceMap class - holds all informaiton about one mapped
  * face and is able to draw itself.
- */  
+ */
 
 // remove this or set to false to enable full program (load will be slower)
-var DEBUG_MODE = true;
+var DEBUG_MODE = false;
 
 // this can be used to set the number of sliders to show
 var NUM_SLIDERS = 5;
@@ -65,8 +65,8 @@ function Face() {
   /*
    * Draw the face with position lists that include:
    *    chin, right_eye, left_eye, right_eyebrow, left_eyebrow
-   *    bottom_lip, top_lip, nose_tip, nose_bridge, 
-   */  
+   *    bottom_lip, top_lip, nose_tip, nose_bridge,
+   */
   this.draw = function(positions) {
     // head
     //print(positions);
@@ -263,7 +263,7 @@ function Face() {
         curveVertex(left_eye[2][0], left_eye[2][1] - 0.05);
       endShape();
     pop();
-        
+
     // shade 2
     push();
       fill(shadow_colours[1]);
@@ -363,8 +363,8 @@ function Face() {
         curveVertex(chin[13][0], chin[13][1]);
       endShape();
     pop();
-  
-    // shade 3 
+
+    // shade 3
     push();
       fill(shadow_colours[2]);
       beginShape();
@@ -375,8 +375,8 @@ function Face() {
       curveVertex(chin[13][0], chin[13][1]);
       curveVertex(chin[11][0], chin[11][1]);
       endShape();
-    pop(); 
-  
+    pop();
+
     ////////////////////////////////////////// mouth
     push();
       fill(shadow_colours[0]);
@@ -384,8 +384,9 @@ function Face() {
         for(let i = 0; i< int(top_lip.length/2) ; i++){
           vertex(top_lip[i][0], top_lip[i][1]);
         }
-        for(let i = 0; i< int(bottom_lip.length/2) ; i++){
-          vertex(bottom_lip[i][0], bottom_lip[i][1]);
+        // for(let i = int(bottom_lip.length/2); i<  bottom_lip.length; i++){
+        for(let i = bottom_lip.length - 1; i >= int(bottom_lip.length/2); i--){
+            vertex(bottom_lip[i][0], bottom_lip[i][1]);
         }
       endShape();
     pop();
@@ -393,7 +394,7 @@ function Face() {
     push();
       fill(shadow_colours[1]);
       beginShape();
-        for(let i = 0; i<= int(bottom_lip.length/2) ; i++){
+        for(let i = int(bottom_lip.length/2); i<  bottom_lip.length; i++){
           vertex(bottom_lip[i][0], bottom_lip[i][1]);
         }
       endShape();
@@ -447,7 +448,7 @@ function Face() {
           curveVertex(bottom_lip[5][0], bottom_lip[5][1]);
           endShape();
         pop();
-          
+
       }
     }
     else{ // mouth open
@@ -475,7 +476,7 @@ function Face() {
           curveVertex(bottom_lip[0][0], bottom_lip[0][1]);
           curveVertex(bottom_lip[1][0], bottom_lip[1][1]);
         endShape();
-      pop();  
+      pop();
       }
       else{
         push();
@@ -522,7 +523,7 @@ function Face() {
         vertex(right_eyebrow[3][0], right_eyebrow[3][1] - eyebrow_thicknessR);
         vertex(right_eyebrow[4][0], right_eyebrow[4][1]);
         vertex(right_eyebrow[3][0], right_eyebrow[3][1] + eyebrow_thicknessR);
-  
+
       endShape();
       beginShape();
         vertex(left_eyebrow[4][0] + abs(direction/5), left_eyebrow[4][1] + eyebrow_thicknessL);
@@ -538,10 +539,10 @@ function Face() {
     let right_eye_pos = segment_average(positions.right_eye);
 
     ///// right eye /////////
-    
+
     let tempRY = right_eye[3][1]+(right_eye[3][1] - right_eye[2][1])/2
     let tempRX = right_eye[3][0] + 0.05;
-    
+
     // under eye right watercolor
     push();
       fill(shadow_colours[0]);
@@ -555,12 +556,12 @@ function Face() {
         curveVertex(right_eye[3][0], right_eye[3][1] + 0.05);
         curveVertex(tempRX + 0.05,tempRY);
         curveVertex(right_eye[4][0], right_eye[4][1] + 0.1);
-        
+
         curveVertex(right_eye[5][0], right_eye[5][1] + 0.04);
         curveVertex(right_eye[4][0], right_eye[4][1]);
       endShape();
     pop();
-    // shade 2  
+    // shade 2
     push();
       stroke(fringe_col);
       beginShape();
@@ -615,7 +616,7 @@ function Face() {
         curveVertex(tempRX + 0.05,tempRY);
         curveVertex(tempRX + 0.05,tempRY);
       endShape();
-      
+
       fill(outline_colour);
       noStroke();
       let e_height = dist(right_eye[4][0],right_eye[4][1],right_eye[2][0],right_eye[2][1]);
@@ -732,9 +733,9 @@ function Face() {
         let x = min(left_eye[3][0], left_eyebrow[4][0] +(nose_bridge[0][0] - left_eyebrow[4][0])/2); // 2 or 1.1?
         curveVertex(x,left_eye[3][1]);
         curveVertex(x,left_eye[3][1]);
-        // curveVertex(left_eye[3][0],left_eye[3][1]); 
+        // curveVertex(left_eye[3][0],left_eye[3][1]);
         // curveVertex(left_eyebrow[4][0] +(nose_bridge[0][0] - left_eyebrow[4][0])/1.1, nose_bridge[0][1]);
-     
+
       endShape();
       fill(outline_colour);
       noStroke();
@@ -786,7 +787,7 @@ function Face() {
         //   // curveVertex(nose_tip[1][0], nose_tip[1][1]);
         //   // curveVertex(nose_tip[2][0], nose_tip[2][1]);
         //   // curveVertex(nose_tip[2][0], nose_tip[2][1]);
-          
+
         // endShape();
         if(direction > 0.5){
           line(nose_tip[2][0],nose_tip[2][1],nose_bridge[3][0],nose_bridge[3][1]);
