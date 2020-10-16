@@ -1,10 +1,8 @@
 ## 2020 MDDN342 Assignment 3: Face Mappings
 
-My inital idea for my face is a stylised face with watercolour-esque shading on one side.
+The idea for my assignment is a stylised face with watercolour-esque shading on one side. The watercolour-esque effect is created through cascading shaded areas to create something similar to a gradient. An outline is added to these to imitate how watercolour can dry and create a fringe effect.
 
-Created the face base and all of the watercolour shaded sections and gave an outline to those for a fringe effect
-
-Five of the sliders are currently in control of:
+Five of the sliders are in control of:
   the thickness of the top eyelid
   the colour of the eyes
   style of the lip
@@ -18,3 +16,14 @@ In the training, the parameters were picked based on these:
   Masculine faces have thinner eye outlines and feminine faces have filled in lips.
   The eye lightness corresponded to the lightness of the eyes in the images.
   The shade depended on the skin tone of the images.
+
+  Image links:
+  -https://unsplash.com/photos/6tHTXiSRUi8
+  -https://unsplash.com/photos/hOF1bWoet_Q
+  -https://unsplash.com/photos/2qvxIr_DXGo
+  -https://unsplash.com/photos/zCG05KP0Jiw
+  -https://unsplash.com/photos/q0Uc8fFdrUo
+  
+
+
+
