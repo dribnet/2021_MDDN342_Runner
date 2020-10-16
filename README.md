@@ -17,6 +17,7 @@ In the training, the parameters were picked based on these:
   The eye lightness corresponded to the lightness of the eyes in the images.
   The shade depended on the skin tone of the images.
 
+
   Image links:
   -https://unsplash.com/photos/6tHTXiSRUi8
   -https://unsplash.com/photos/hOF1bWoet_Q

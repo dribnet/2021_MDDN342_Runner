@@ -1,0 +1,24 @@
+{
+  "commits": [
+    {
+      "sha": "502f42ec801ef07ae1b930482eab8f509ce51251",
+      "name": "final_version"
+    },
+    {
+      "sha": "29bfd23eeed1ada1a17c10cf1b37839f278b5d41",
+      "name": "trained_initial"
+    },
+    {
+      "sha": "14b4830ee2813c21c3acf008b7118574e6e753c3",
+      "name": "shaded_face"
+    },
+    {
+      "sha": "db168de3cc1d70728b6b89af9edb49168602f021",
+      "name": "basic_face"
+    },
+    {
+      "sha": "f2f17cda73d71285aaa2649095b115cfbe5a292e",
+      "name": "sketch"
+    }
+  ]
+}
