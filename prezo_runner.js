@@ -38,6 +38,7 @@ let prezo_list = [];
 
 let secondsUntilSwapMode = 15;
 let lastFaceSwappedTime;
+let faceSwapPaused = false;
 let isSwappingFaces = true;
 let secondsPerWord = 8;
 let curSwapFace = 0;
@@ -53,9 +54,9 @@ if (typeof NUM_SLIDERS === 'undefined' || NUM_SLIDERS === null) {
 async function preload () {
   prezo_list = [
     {
-      "text": "Eugene Park / Watercolour (2020)",
-      "file": "park_training_values.json",
-      "face": new ParkFace()
+      "text": "Tessa Chen / Among (2020)",
+      "file": "chen_training_values.json",
+      "face": new ChenFace()
     },
     {
       "text": "Tia Cooper-Theobald / Walrus (2020)",
@@ -63,24 +64,59 @@ async function preload () {
       "face": new CooperFace()
     },
     {
+      "text": "Maia Hill / Anonymity (2020)",
+      "file": "hill_training_values.json",
+      "face": new HillFace()
+    },
+    {
+      "text": "Kathy Ho / Pumpkin (2020)",
+      "file": "ho_training_values.json",
+      "face": new HoFace()
+    },
+    {
+      "text": "Baxter Howard-Brown / Dog (2020)",
+      "file": "howard_training_values.json",
+      "face": new HowardFace()
+    },
+    {
+      "text": "Xinze Hu / Bull (2020)",
+      "file": "hu_training_values.json",
+      "face": new HuFace()
+    },
+    {
+      "text": "Lateefah Idris / Environment (2020)",
+      "file": "idris_training_values.json",
+      "face": new IdrisFace()
+    },
+    {
+      "text": "Elena Lee / Flower (2020)",
+      "file": "lee_training_values.json",
+      "face": new LeeFace()
+    },
+    {
+      "text": "Mingyue Luo / Rabbit (2020)",
+      "file": "luo_training_values.json",
+      "face": new LuoFace()
+    },
+    {
+      "text": "George McKendry / Flat (2020)",
+      "file": "mckendry_training_values.json",
+      "face": new McKendryFace()
+    },
+    {
+      "text": "Eugene Park / Watercolour (2020)",
+      "file": "park_training_values.json",
+      "face": new ParkFace()
+    },
+    {
       "text": "Shin Yee / Poker (2020)",
       "file": "yee_training_values.json",
       "face": new YeeFace()
     },
     {
-      "text": "Tessa Chen / Among (2020)",
-      "file": "chen_training_values.json",
-      "face": new ChenFace()
-    },
-    {
-      "text": "Hannah Dockerty / Emotion (2017)",
-      "file": "dockerty_training_values.json",
-      "face": new DockertyFace()
-    },
-    {
-      "text": "Michael Kelly / Aged (2017)",
-      "file": "kelly_training_values.json",
-      "face": new KellyFace()
+      "text": "Yinan Zhao / Abstract (2020)",
+      "file": "zhao_training_values.json",
+      "face": new ZhaoFace()
     },
     {
       "text": "Hazel Joy / Trumped (2018)",
@@ -93,19 +129,14 @@ async function preload () {
       "face": new CampbellFace()
     },
     {
-      "text": "Yinan Zhao / Abstract (2020)",
-      "file": "zhao_training_values.json",
-      "face": new ZhaoFace()
+      "text": "Hannah Dockerty / Emotion (2017)",
+      "file": "dockerty_training_values.json",
+      "face": new DockertyFace()
     },
     {
-      "text": "Xinze Hu / Bull (2020)",
-      "file": "hu_training_values.json",
-      "face": new HuFace()
-    },
-    {
-      "text": "George McKendry / Flat (2020)",
-      "file": "mckendry_training_values.json",
-      "face": new McKendryFace()
+      "text": "Michael Kelly / Aged (2017)",
+      "file": "kelly_training_values.json",
+      "face": new KellyFace()
     }
   ]
 
@@ -120,7 +151,7 @@ async function preload () {
   for(let i=0; i<prezo_list.length; i++) {
     print("loading ", i, prezo_list[i].file);
     prezo_list[i].trainValues = loadJSON(prezo_list[i].file);
-    print("done");
+    // print("done");
   }
   model_loaded = true;
 }
@@ -608,6 +639,10 @@ async function draw () {
           mainFace.draw(shifted_positions);
       }
       pop();
+      while(this._styles.length > 0) {
+        print("Warning: extra pops required")
+        pop();
+      }
     }
     if(do_train) {
       textDisplay = "Train: " + curKey;
@@ -694,6 +729,10 @@ async function draw () {
       mainFace.setProperties(params);
       mainFace.draw(shifted_positions);
       pop();
+      while(this._styles.length > 0) {
+        print("Warning: extra pops required")
+        pop();
+      }
 
       var scale_x = 80.0 / img.width;
       var scale_y = 80.0 / img.height;
@@ -720,6 +759,10 @@ async function draw () {
           rect(10, 10, 70, 70);
         }
         pop();
+        while(this._styles.length > 0) {
+          print("Warning: extra pops required")
+          pop();
+        }
       }
     }
 
@@ -926,7 +969,12 @@ async function draw () {
 
   textDisplay =  prezo_list[curSwapFace].text;
 
-  fill(255);
+  if(faceSwapPaused) {
+    fill(255, 255, 128);
+  }
+  else {
+    fill(255);
+  }
   textSize(32);
   textAlign(CENTER);
   text(textDisplay, width/2, height-12);
@@ -936,8 +984,6 @@ async function keyTyped() {
   if(!haveStarted) {
     return;
   }
-  // new face
-  lastFaceSwappedTime = 0;
   var mode = faceSelector.value();
   if (key == 'q' && mode != 'Faces') {
     faceSelector.value('Faces');
@@ -984,6 +1030,10 @@ async function keyTyped() {
   }
   else if (key == 'l') {
     loadCurrentSettings();
+  }
+
+  if (key == 'p') {
+    faceSwapPaused = !faceSwapPaused;
   }
 
   if (key == '!') {
@@ -1197,5 +1247,17 @@ function keyPressed() {
       curTrainIndex = (curTrainIndex + 1) % trainDataKeys.length;
       updateSlidersForTraining();
     }
+  }
+  else if (mode == 'Video') {
+    // new face
+    let now = millis();
+    lastFaceSwappedTime = now;
+    if (keyCode == LEFT_ARROW || keyCode == UP_ARROW) {
+      curSwapFace = (curSwapFace + prezo_list.length - 1) % prezo_list.length;
+    } else if (keyCode === RIGHT_ARROW || keyCode == DOWN_ARROW) {
+      curSwapFace = (curSwapFace + 1) % prezo_list.length;
+    }
+    mainFace = prezo_list[curSwapFace].face;
+    trainValues = prezo_list[curSwapFace].trainValues;
   }
 }

@@ -291,7 +291,6 @@ function CampbellFace() {
       noFill();
       arc(eye2_pos[0], (eye2_pos[1]), 130 * scale, 110 * scale, 240, 300);
 
-      colorMode(RGB);
     }
 
   // facial feature if looking right  
@@ -436,6 +435,7 @@ function CampbellFace() {
     arc(eye1_pos[0], (eye1_pos[1]), 130 * scale, 110 * scale, 240, 300);
 
   }
+      // colorMode(RGB);
   }
 
   /* set internal properties based on list numbers 0-100 */

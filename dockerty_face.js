@@ -24,7 +24,7 @@ h5 = [255, 231, 216, 10];
 
 noseHighlight = [h1, h2, h3, h4, h5];
 skinShadow_color = ["#d6a995", "#d6a995","#ba9584", "#9b7768", "#725241"]
-stroke_color = [skinLowlight_color[1]];
+// stroke_color = [skinLowlight_color[1]];
 
 upperLip_color = ["#ba8080", "#d1a3a1", "#dba69b", "#a5776b","#6d453d", "#54322b"]; // 1 longer than the rest for stroke
 lowerLip_color = ["#db9d9d", "#ebbdbb", "#ffc9be", "#ca9588", "#8c5c52"];

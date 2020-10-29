@@ -4,9 +4,9 @@
  */
 // other variables can be in here too
 // these control the colors used
-bg_color = [225, 206, 187];
-fg_color = [151, 102, 52];
-stroke_color = [95, 52, 8];
+const kelly_bg_color = [225, 206, 187];
+const kelly_fg_color = [151, 102, 52];
+const kelly_stroke_color = [95, 52, 8];
 
 function KellyFace() {
     this.hairColor = 50;
@@ -300,8 +300,8 @@ function KellyFace() {
         function toms_face() {
 
             // head
-            stroke(stroke_color);
-            fill(fg_color);
+            stroke(kelly_stroke_color);
+            fill(kelly_fg_color);
             beginShape();
             for (var i = 0; i < positions.chin.length; i++) {
                 vertex(positions.chin[i][0], positions.chin[i][1]);
@@ -316,7 +316,7 @@ function KellyFace() {
 
             // mouth
             noStroke();
-            fill(bg_color);
+            fill(kelly_bg_color);
             beginShape();
             for (var i = 0; i < positions.top_lip.length; i++) {
                 vertex(positions.top_lip[i][0], positions.top_lip[i][1]);
@@ -348,11 +348,11 @@ function KellyFace() {
             }
             endShape(CLOSE);
 
-            fill(fg_color);
+            fill(kelly_fg_color);
             ellipse(eye1_pos[0], eye1_pos[1], 16 * scale, 16 * scale);
             ellipse(eye2_pos[0], eye2_pos[1], 16 * scale, 16 * scale);
 
-            fill(stroke_color);
+            fill(kelly_stroke_color);
             beginShape();
             for (var i = 0; i < positions.right_eyebrow.length; i++) {
                 vertex(positions.right_eyebrow[i][0], positions.right_eyebrow[i][1]);
