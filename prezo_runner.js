@@ -43,6 +43,9 @@ let isSwappingFaces = true;
 let secondsPerWord = 8;
 let curSwapFace = 0;
 
+let face_decay = 0.97;
+let previous_faces = [];
+
 if (typeof DEBUG_MODE === 'undefined' || DEBUG_MODE === null) {
   var DEBUG_MODE = false;
 }
@@ -404,6 +407,35 @@ function num_dist(e1, e2) {
   return dist;
 }
 
+function embeddingDistance(e1, e2) {
+  let total = 0;
+  for(let i=0; i<e1.length; i++) {
+    total = total + Math.abs(e1[i] - e2[i]);
+  }
+  return total;
+}
+
+function averageEmbeddingFromLast(emb) {
+  if (previous_faces.length == 0) {
+    return emb;
+  }
+  let best_e = null;
+  let closest_dist = -1;
+  for(let i=0; i<previous_faces.length; i++) {
+    let cur_dist = embeddingDistance(emb, previous_faces[i]);
+    if(closest_dist < 0 || cur_dist < closest_dist) {
+      cur_dist = closest_dist;
+      best_e = previous_faces[i];
+    }
+  }
+  // copy old version
+  let new_e = emb.slice();
+  for(let i=0; i<new_e.length; i++) {
+    new_e[i] = map(face_decay, 0, 1, best_e[i], emb[i])
+  }
+  return new_e;
+}
+
 var processing_vid_face = false;
 var lastProcessedVidFace = null;
 
@@ -601,6 +633,8 @@ async function draw () {
     stroke(0);
     fill(255);
 
+    let next_previous_faces = []
+
     for(var i=0; i<data.landmarks.length; i++) {
       // get array of face marker positions [x, y] format
       var positions = data.landmarks[i];
@@ -668,6 +702,12 @@ async function draw () {
             (data.embedding[i].length == 128)) {
           // print("Using embedding ", i)
           var curEmbedding = data.embedding[i];
+          if (mode == 'Video') {
+            let oldy = curEmbedding[0];
+            curEmbedding = averageEmbeddingFromLast(curEmbedding);
+            // print("So -> ", oldy, curEmbedding[0]);
+            next_previous_faces.push(curEmbedding)
+          }
           results = getAverageSettingsFrom(curEmbedding);
           settings = results[0];
         }
@@ -689,6 +729,8 @@ async function draw () {
         pop();
       }
     }
+    previous_faces = next_previous_faces;
+
     if(do_train) {
       textDisplay = "Train: " + curKey;
     }
@@ -1213,6 +1255,7 @@ function updateSlidersForTraining() {
   var curKey = trainDataKeys[curTrainIndex];
 
   // first find the closest neighbors
+  // TODO: is 5 right and maybe this should be weighted or something?
   var nearest = allEmbeddingsTree.nearest(trainData[curKey].embedding[0], 5);
   curNeighbors = [];
   curNeighborSettings = [];
