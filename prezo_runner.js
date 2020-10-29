@@ -43,7 +43,8 @@ let isSwappingFaces = true;
 let secondsPerWord = 8;
 let curSwapFace = 0;
 
-let face_decay = 0.97;
+let face_decay = 0.98;
+let face_decay_queue_size = 5;
 let previous_faces = [];
 
 if (typeof DEBUG_MODE === 'undefined' || DEBUG_MODE === null) {
@@ -165,6 +166,16 @@ async function preload () {
       "text": "Yinan Zhao / Abstract (2020)",
       "file": "zhao_training_values.json",
       "face": new ZhaoFace()
+    },
+    {
+      "text": "Michael Kelly / Lego (2019)",
+      "file": "kelly19_training_values.json",
+      "face": new Kelly19Face()
+    },
+    {
+      "text": "Lucy Jaegers / Unique (2019)",
+      "file": "jaegers_training_values.json",
+      "face": new JaegersFace()
     },
     {
       "text": "Hazel Joy / Trumped (2018)",
@@ -417,16 +428,25 @@ function embeddingDistance(e1, e2) {
 
 function averageEmbeddingFromLast(emb) {
   if (previous_faces.length == 0) {
+    // print("Nada 0")
     return emb;
   }
   let best_e = null;
   let closest_dist = -1;
   for(let i=0; i<previous_faces.length; i++) {
-    let cur_dist = embeddingDistance(emb, previous_faces[i]);
-    if(closest_dist < 0 || cur_dist < closest_dist) {
-      cur_dist = closest_dist;
-      best_e = previous_faces[i];
+    let cur_list = previous_faces[i];
+    for(let j=0; j<cur_list.length; j++) {
+      let cur_dist = embeddingDistance(emb, cur_list[j]);
+      if(closest_dist < 0 || cur_dist < closest_dist) {
+        closest_dist = cur_dist;
+        best_e = cur_list[j];
+        // print("closest on frame ", i, " face ", j, " dist ", cur_dist);
+      }
     }
+  }
+  if (closest_dist == -1) {
+    // print("Nada 5")
+    return emb;
   }
   // copy old version
   let new_e = emb.slice();
@@ -729,7 +749,13 @@ async function draw () {
         pop();
       }
     }
-    previous_faces = next_previous_faces;
+    if(previous_faces.length < face_decay_queue_size) {
+      previous_faces.push(next_previous_faces)
+    }
+    else {
+      let old_faces = previous_faces.shift();
+      previous_faces.push(next_previous_faces)
+    }
 
     if(do_train) {
       textDisplay = "Train: " + curKey;

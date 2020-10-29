@@ -11,15 +11,6 @@
 
 // other variables can be in here too
 // here's some examples for colors used
-const green = [210,221,185];//green
-const blue = [179, 198, 193];
-const fg_color3 = [151, 102, 52];
-const red = [196, 29, 54];
-const pink = [240, 55, 144];
-const purple = [222, 199, 255];
-const faceColor = [217, 160, 143];
-const black = [0,0,0];
-const darkblue = [49, 50, 56];
 
 // angleMode(DEGREES);
 // given a segment, this returns the average point [x, y]
@@ -47,6 +38,16 @@ function segment_average(segment) {
  * s9: blurLength decides how long the eyeshadow flows down the face
  */
 function ZhaoFace() {
+  const green = [210,221,185];//green
+  const blue = [179, 198, 193];
+  const fg_color3 = [151, 102, 52];
+  const red = [196, 29, 54];
+  const pink = [240, 55, 144];
+  const purple = [222, 199, 255];
+  const faceColor = [217, 160, 143];
+  const black = [0,0,0];
+  const darkblue = [49, 50, 56];
+
   // these are state variables for a face
 
   this.eyelashLength = 0.56;
