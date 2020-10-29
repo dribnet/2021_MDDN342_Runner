@@ -104,9 +104,54 @@ async function preload () {
       "face": new McKendryFace()
     },
     {
+      "text": "Reuben McSweeney / Skull (2020)",
+      "file": "mcsweeney_training_values.json",
+      "face": new McSweeneyFace()
+    },
+    {
+      "text": "Zed Ng / Mask (2020)",
+      "file": "ng_training_values.json",
+      "face": new NgFace()
+    },
+    {
+      "text": "Trish Nuesca / Cat (2020)",
+      "file": "nuesca_training_values.json",
+      "face": new NuescaFace()
+    },
+    {
       "text": "Eugene Park / Watercolour (2020)",
       "file": "park_training_values.json",
       "face": new ParkFace()
+    },
+    {
+      "text": "BeiBei Ruan / Rabbit Ears (2020)",
+      "file": "ruan_training_values.json",
+      "face": new RuanFace()
+    },
+    {
+      "text": "Emily To / Bubble (2020)",
+      "file": "to_training_values.json",
+      "face": new ToFace()
+    },
+    {
+      "text": "Heidi Truong / From Dumpling (2020)",
+      "file": "truong_training_values.json",
+      "face": new TruongFace()
+    },
+    {
+      "text": "Leigh Tuala-Lauvao / Minion (2020)",
+      "file": "tuala_training_values.json",
+      "face": new TualaFace()
+    },
+    {
+      "text": "Wenjing Wang / Lucky Cat (2020)",
+      "file": "wang_training_values.json",
+      "face": new WangFace()
+    },
+    {
+      "text": "Wenlin Zhang / Halloween (2020)",
+      "file": "zhang_training_values.json",
+      "face": new ZhangFace()
     },
     {
       "text": "Shin Yee / Poker (2020)",
