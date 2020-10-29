@@ -134,7 +134,7 @@ function setup () {
     faceSelector.option('TrainingQuiz');
     faceSelector.option('InterpolationQuiz');
     faceSelector.option('Video');
-    faceSelector.value('Faces');    
+    faceSelector.value('Video');    
   }
   faceSelector.parent('selector1Container');
 
