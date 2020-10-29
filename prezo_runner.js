@@ -40,7 +40,7 @@ let secondsUntilSwapMode = 15;
 let lastFaceSwappedTime;
 let faceSwapPaused = false;
 let isSwappingFaces = true;
-let secondsPerWord = 8;
+let secondsPerFace = 15;
 let curSwapFace = 0;
 
 let face_decay = 0.98;
@@ -496,7 +496,7 @@ async function draw () {
   }
 
   if(isSwappingFaces) {
-    if(!faceSwapPaused && lastFaceSwappedTime + 1000 * secondsPerWord < now) {
+    if(!faceSwapPaused && lastFaceSwappedTime + 1000 * secondsPerFace < now) {
       lastFaceSwappedTime = now;
       curSwapFace = (curSwapFace + 1) % prezo_list.length;
       mainFace = prezo_list[curSwapFace].face;
