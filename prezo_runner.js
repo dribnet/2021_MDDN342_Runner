@@ -168,19 +168,39 @@ async function preload () {
       "face": new ZhaoFace()
     },
     {
-      "text": "Michael Kelly / Lego (2019)",
-      "file": "kelly19_training_values.json",
-      "face": new Kelly19Face()
-    },
-    {
       "text": "Lucy Jaegers / Unique (2019)",
       "file": "jaegers_training_values.json",
       "face": new JaegersFace()
     },
     {
+      "text": "Michael Kelly / Lego (2019)",
+      "file": "kelly19_training_values.json",
+      "face": new Kelly19Face()
+    },
+    {
+      "text": "Brock Trewavas / Illustration (2019)",
+      "file": "trewavas_training_values.json",
+      "face": new TrewavasFace()
+    },
+    {
+      "text": "Josh Felizardo / Machine (2018)",
+      "file": "felizardo_training_values.json",
+      "face": new FelizardoFace()
+    },
+    // {
+    //   "text": "Robert Jordan / Paint (2018)",
+    //   "file": "jordan_training_values.json",
+    //   "face": new JordanFace()
+    // },
+    {
       "text": "Hazel Joy / Trumped (2018)",
       "file": "joy_training_values.json",
       "face": new JoyFace()
+    },
+    {
+      "text": "Rachel Salazar / Mattisse (2018)",
+      "file": "salazar_training_values.json",
+      "face": new SalazarFace()
     },
     {
       "text": "James Campbell / Street (2017)",
@@ -196,6 +216,11 @@ async function preload () {
       "text": "Michael Kelly / Aged (2017)",
       "file": "kelly_training_values.json",
       "face": new KellyFace()
+    },
+    {
+      "text": "Christina Petris / Fire (2017)",
+      "file": "petris_training_values.json",
+      "face": new PetrisFace()
     }
   ]
 
@@ -471,7 +496,7 @@ async function draw () {
   }
 
   if(isSwappingFaces) {
-    if(lastFaceSwappedTime + 1000 * secondsPerWord < now) {
+    if(!faceSwapPaused && lastFaceSwappedTime + 1000 * secondsPerWord < now) {
       lastFaceSwappedTime = now;
       curSwapFace = (curSwapFace + 1) % prezo_list.length;
       mainFace = prezo_list[curSwapFace].face;
