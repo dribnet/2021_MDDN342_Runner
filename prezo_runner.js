@@ -82,6 +82,18 @@ async function preload () {
       "anim": garcia_draw_one_frame
     },
     {
+      "text": "Kayla Palmer / Cats (2021)",
+      "file": "palmer_training_values.json",
+      "face": new PalmerFace(),
+      "anim": palmer_draw_one_frame
+    },
+    {
+      "text": "Liam Sapsford / Cartoony (2021)",
+      "file": "sapsford_training_values.json",
+      "face": new SapsfordFace(),
+      "anim": sapsford_draw_one_frame
+    },
+    {
       "text": "Tessa Chen / Among (2020)",
       "file": "chen_training_values.json",
       "face": new ChenFace()
