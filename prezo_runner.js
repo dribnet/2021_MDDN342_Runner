@@ -82,6 +82,24 @@ async function preload () {
       "anim": garcia_draw_one_frame
     },
     {
+      "text": "Clara Ge / Modern Cartoons (2021)",
+      "file": "ge_training_values.json",
+      "face": new GeFace(),
+      "anim": gambles_draw_one_frame
+    },
+    {
+      "text": "Bee Huang / Astronauts (2021)",
+      "file": "huang_training_values.json",
+      "face": new HuangFace(),
+      "anim": huang_draw_one_frame
+    },
+    {
+      "text": "Bee O'Brien / Soot (2021)",
+      "file": "obrien_training_values.json",
+      "face": new OBrienFace(),
+      "anim": obrien_draw_one_frame
+    },
+    {
       "text": "Kayla Palmer / Cats (2021)",
       "file": "palmer_training_values.json",
       "face": new PalmerFace(),
@@ -92,6 +110,12 @@ async function preload () {
       "file": "sapsford_training_values.json",
       "face": new SapsfordFace(),
       "anim": sapsford_draw_one_frame
+    },
+    {
+      "text": "Ziyi Wei / Ghost (2021)",
+      "file": "wei_training_values.json",
+      "face": new WeiFace(),
+      "anim": wei_draw_one_frame
     },
     {
       "text": "Tessa Chen / Among (2020)",
