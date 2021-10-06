@@ -70,6 +70,18 @@ async function preload () {
       "anim": bruwer_draw_one_frame
     },
     {
+      "text": "Jamie Gambles / Pixel Art filter (2021)",
+      "file": "gambles_training_values.json",
+      "face": new GamblesFace(),
+      "anim": gambles_draw_one_frame
+    },
+    {
+      "text": "Laura Garcia / PowerPuff (2021)",
+      "file": "garcia_training_values.json",
+      "face": new GarciaFace(),
+      "anim": garcia_draw_one_frame
+    },
+    {
       "text": "Tessa Chen / Among (2020)",
       "file": "chen_training_values.json",
       "face": new ChenFace()
