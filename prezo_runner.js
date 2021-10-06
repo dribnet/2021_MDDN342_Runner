@@ -40,7 +40,7 @@ let secondsUntilSwapMode = 15;
 let lastFaceSwappedTime;
 let faceSwapPaused = false;
 let isSwappingFaces = true;
-let secondsPerFace = 15;
+let secondsPerFace = 150;
 let curSwapFace = 0;
 
 let face_decay = 0.98;
@@ -57,6 +57,18 @@ if (typeof NUM_SLIDERS === 'undefined' || NUM_SLIDERS === null) {
 
 async function preload () {
   prezo_list = [
+    {
+      "text": "Zavier Boyles / Masks (2021)",
+      "file": "boylesz_training_values.json",
+      "face": new BoylesFace(),
+      "anim": Boyles_draw_one_frame
+    },
+    {
+      "text": "Robyn Bruwer / Illustration (2021)",
+      "file": "bruwer_training_values.json",
+      "face": new BruwerFace(),
+      "anim": bruwer_draw_one_frame
+    },
     {
       "text": "Tessa Chen / Among (2020)",
       "file": "chen_training_values.json",
@@ -484,7 +496,28 @@ function averageEmbeddingFromLast(emb) {
 var processing_vid_face = false;
 var lastProcessedVidFace = null;
 
+// this can be modified after we discuss in lecture
+const buffersPerFrame = 1;
+
+// probably best not to modify anything below this line
+const frameMax = 96;
+let recording = false;
+let gifRecorder = null;
+let debugZoom = false;
+let debugView = false;
+let stickFrame = 0;
+
 async function draw () {
+  let animation_max_frames = frameMax * buffersPerFrame;
+  let sticky_max_frames = animation_max_frames + stickFrame;
+  let cur_frame = frameCount % sticky_max_frames;
+  if (cur_frame >= animation_max_frames) {
+    cur_frame = 0;
+  }
+  let cur_frac = map(cur_frame, 0, animation_max_frames, 0, 1);
+
+  let anim_running = false;
+
   if (!model_loaded) {
     return;
   }
@@ -615,7 +648,14 @@ async function draw () {
     }
 
     // we are not bailing, draw background
-    background(bg_color1);
+    if ("anim" in prezo_list[curSwapFace]) {
+      anim_running = true;
+      prezo_list[curSwapFace]["anim"](cur_frac);
+    }
+    else {
+      background(bg_color1);
+    }
+    // Boyles_draw_one_frame(cur_frac);
 
 
     // Displays the image at its actual size at point (0,0)
@@ -644,7 +684,11 @@ async function draw () {
         var rect_w = v_w;
         var rect_h = v_h;
         // print(im_w, im_h);
-        image(img, x2, y1, im_w, im_h, 0, 0, v_w_p, v_h_p);
+
+        if (!anim_running) {
+          image(img, x2, y1, im_w, im_h, 0, 0, v_w_p, v_h_p);
+        }
+
     }
     else {
         var x1 = (width/4-400/2);
@@ -672,7 +716,9 @@ async function draw () {
       var curSliderTintValue = sliderTint.value();
       var overlayAlpha = map(curSliderTintValue, 0, 100, 255, 0);
       fill(bg_color1[0], bg_color1[1], bg_color1[2], overlayAlpha);
-      rect(x2, y1, rect_w, rect_h);
+      if (!anim_running) {
+        rect(x2, y1, rect_w, rect_h);
+      }
     }
 
     stroke(0);
